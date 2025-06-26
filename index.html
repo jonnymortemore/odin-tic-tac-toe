@@ -9,19 +9,30 @@
 </head>
 <body>
     <main>
-        <div id="currentPlayer"></div>
-        <div class="grid">
-            <div class= "gridCell" id="0-0" data-x="0" data-y="0">1</div>
-            <div class= "gridCell" id="0-1" data-x="0" data-y="1">2</div>
-            <div class= "gridCell" id="0-2" data-x="0" data-y="2">3</div>
-            <div class= "gridCell" id="1-0" data-x="1" data-y="0">4</div>
-            <div class= "gridCell" id="1-1" data-x="1" data-y="1">5</div>
-            <div class= "gridCell" id="1-2" data-x="1" data-y="2">6</div>
-            <div class= "gridCell" id="2-0" data-x="2" data-y="0">7</div>
-            <div class= "gridCell" id="2-1" data-x="2" data-y="1">8</div>
-            <div class= "gridCell" id="2-2" data-x="2" data-y="2">9</div>
+        <div class="game-details">
+             <form>
+                <label for="player1Name">Player 1 Name</label>
+                <input id="player1Name" name="player1Name" type="text" placeholder="Player 1">
+                <label for="player2Name">Player 2 Name</label>
+                <input id="player2Name" name="player2Name" type="text" placeholder="Player 2">
+                <input type="submit" value="Change Player Names">
+            </form>
+            <button id="startGame">Start Game</button>
+        </div> 
+        <div class="game-grid">   
+            <div class="grid">
+                <div class= "gridCell" id="0-0" data-x="0" data-y="0"></div>
+                <div class= "gridCell" id="0-1" data-x="0" data-y="1"></div>
+                <div class= "gridCell" id="0-2" data-x="0" data-y="2"></div>
+                <div class= "gridCell" id="1-0" data-x="1" data-y="0"></div>
+                <div class= "gridCell" id="1-1" data-x="1" data-y="1"></div>
+                <div class= "gridCell" id="1-2" data-x="1" data-y="2"></div>
+                <div class= "gridCell" id="2-0" data-x="2" data-y="0"></div>
+                <div class= "gridCell" id="2-1" data-x="2" data-y="1"></div>
+                <div class= "gridCell" id="2-2" data-x="2" data-y="2"></div>
+            </div>
+            <div id="currentPlayer"></div>
         </div>
-        <button id="startGame">Start Game</button>
     </main>
 </body>
 </html>

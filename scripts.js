@@ -84,8 +84,8 @@ function game() {
     }
     
     return {
-        player1: player("player1", 0),
-        player2: player("player2", 1),
+        player1: player("Player 1", 0),
+        player2: player("Player 2", 1),
         gameboard,
         getRound,
         addRound,
@@ -97,6 +97,7 @@ function game() {
 
 function gameProgress() {
 
+
     let gameCompleted = false;
 
     const gameMarkings = {
@@ -105,6 +106,20 @@ function gameProgress() {
     }
 
     const newGame = game();
+
+    //update player name
+    document.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const form = new FormData(event.target);
+
+        if (form.get("player1Name") !== "") {
+            newGame.player1.name = form.get("player1Name");
+        }
+        if (form.get("player2Name") !== "") {
+            newGame.player2.name = form.get("player2Name");
+        }
+        setCurrentPlayer()
+    });
 
     const displayBoard = () => {
         for (let x = 0; x < newGame.gameboard.board.length; x++) {
@@ -123,7 +138,7 @@ function gameProgress() {
     let currentPlayer = newGame.player1;
 
     const setCurrentPlayer = () => {
-        document.querySelector("#currentPlayer").innerText = currentPlayer.name;
+        document.querySelector("#currentPlayer").innerText = `${currentPlayer.name}'s Turn (${gameMarkings[currentPlayer.playerNumber]})`;
     };
 
     const getCurrentPlayer = () => currentPlayer;
@@ -187,3 +202,4 @@ function gameProgress() {
 document.querySelector("#startGame").addEventListener("click", () => {
     gameProgress()
 })
+

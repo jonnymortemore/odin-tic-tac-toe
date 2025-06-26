@@ -48,28 +48,33 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
+body {
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+
 main {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
   padding-top: 50px;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .grid  {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  width: 50%;
-  height: 50%;
   align-items: center;
   justify-content: center;
+  width: 80%;
 
 }
 
 .grid * {
   border:  2px solid black;
-  height: 200px;
+  height: 150px;
   font-size: 50px;
   display: flex;
   flex-direction: row;
@@ -84,7 +89,9 @@ main {
 
 #currentPlayer {
   margin-bottom: 10px;
-  font-size: 20px;
+  font-size: 40px;
+  width: 100%;
+  text-align: center;
 }
 
 #startGame {
@@ -98,4 +105,42 @@ main {
 #startGame:hover {
   background-color: black;
   color: white;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+form * {
+  margin-bottom: 10px;
+}
+
+input[type=submit] {
+  padding: 5px;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: white;
+}
+
+input[type=submit]:hover {
+  background-color: black;
+  color: white;
+}
+
+label {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.game-grid, .game-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
