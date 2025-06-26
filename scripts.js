@@ -80,7 +80,8 @@ function game() {
 
     //make a move
     const makeMove = (player, x, y) => {
-        gameboard.board[x][y] = player.playerNumber;
+            gameboard.board[x][y] = player.playerNumber;
+        
     }
     
     return {
@@ -144,6 +145,10 @@ function gameProgress() {
     };
 
     const gameTurn = (x, y) => {
+        if (newGame.gameboard.board[parseInt(x)][parseInt(y)] !==  -1) {
+            return
+        };
+
         newGame.makeMove(currentPlayer, parseInt(x), parseInt(y))
         displayBoard()
         if (newGame.checkWinner()) {
