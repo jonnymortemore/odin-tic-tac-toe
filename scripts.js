@@ -78,29 +78,109 @@ function game() {
             return false;
     }
 
-    const gameEnd = (winner) => {
-        console.log(`Winner: ${winner.name}`);
-    }
-
     //make a move
     const makeMove = (player, x, y) => {
         gameboard.board[x][y] = player.playerNumber;
-        const winner = checkWinner();
-        if (winner) {
-            gameEnd(player);
-        } else {
-            addRound;
-        }
     }
     
-
-
     return {
         player1: player("player1", 0),
         player2: player("player2", 1),
         gameboard,
         getRound,
-        makeMove
+        addRound,
+        makeMove,
+        checkWinner,
+        boardPlacements
     }
 }
-const newGame = game();
+
+function gameProgress() {
+
+    let gameCompleted = false;
+
+    const gameMarkings = {
+        0: "X",
+        1: "O"
+    }
+
+    const newGame = game();
+
+    const displayBoard = () => {
+        for (let x = 0; x < newGame.gameboard.board.length; x++) {
+            for (let y = 0; y < newGame.gameboard.board.length; y++) {
+                const gridCell = document.getElementById(`${x}-${y}`);
+                if (newGame.gameboard.board[x][y] !== -1) {
+                    gridCell.innerText = gameMarkings[newGame.gameboard.board[x][y]];
+                } else {
+                    gridCell.innerText = "";
+                }
+                
+            }
+        }
+    };
+
+    let currentPlayer = newGame.player1;
+
+    const setCurrentPlayer = () => {
+        document.querySelector("#currentPlayer").innerText = currentPlayer.name;
+    };
+
+    const updatePlayer = () => {
+        if (currentPlayer.playerNumber === newGame.player1.playerNumber) {
+            currentPlayer = newGame.player2;
+        } else {
+            currentPlayer = newGame.player1;
+        }
+    }
+
+    const endGame = (draw) => {
+        gameCompleted = true;
+        if (!draw) {
+            document.querySelector("#currentPlayer").innerText = `${currentPlayer.name} wins!`
+            return
+        }
+        document.querySelector("#currentPlayer").innerText = `draw!`      
+    };
+
+    const gameTurn = (x, y) => {
+        newGame.makeMove(currentPlayer, parseInt(x), parseInt(y))
+        displayBoard()
+        if (newGame.checkWinner()) {
+            endGame(draw=false)
+        } else {
+            if (newGame.getRound() === 9) {
+                endGame(draw=true)
+            } else {
+                updatePlayer();
+                setCurrentPlayer();
+                newGame.addRound()
+            }   
+        }
+    }
+
+    //setup event listeners for grid cells
+    document.querySelectorAll(".gridCell").forEach((el) => {
+        el.addEventListener("click", (e) => {
+            if (!gameCompleted) {
+                gameTurn(e.target.dataset.x, e.target.dataset.y)
+            }
+            
+        })
+    });
+
+    setCurrentPlayer()
+    displayBoard()
+
+    return {
+        newGame,
+        currentPlayer,
+        round: newGame.getRound(),
+        displayBoard,
+        setCurrentPlayer,
+    }
+}
+
+document.querySelector("#startGame").addEventListener("click", () => {
+    gameProgress()
+})

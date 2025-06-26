@@ -48,4 +48,35 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 50px;
+}
 
+.grid  {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 50%;
+  height: 50%;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.grid * {
+  border:  2px solid black;
+  height: 200px;
+  font-size: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid *:hover {
+  background-color: green;
+}
