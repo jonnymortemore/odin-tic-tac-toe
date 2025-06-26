@@ -36,7 +36,6 @@ function game() {
         const X_ROW_WINNER = [boardPlacements.X, boardPlacements.X, boardPlacements.X]
         const O_ROW_WINNER = [boardPlacements.O, boardPlacements.O, boardPlacements.O]
         const board = gameboard.board.slice();
-        console.log(board);
 
         const cols = [
             [board[0][0], board[1][0], board[2][0]], 
@@ -127,6 +126,8 @@ function gameProgress() {
         document.querySelector("#currentPlayer").innerText = currentPlayer.name;
     };
 
+    const getCurrentPlayer = () => currentPlayer;
+
     const updatePlayer = () => {
         if (currentPlayer.playerNumber === newGame.player1.playerNumber) {
             currentPlayer = newGame.player2;
@@ -178,11 +179,8 @@ function gameProgress() {
     displayBoard()
 
     return {
-        newGame,
-        currentPlayer,
         round: newGame.getRound(),
-        displayBoard,
-        setCurrentPlayer,
+        getCurrentPlayer
     }
 }
 
