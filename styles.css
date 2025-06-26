@@ -78,5 +78,24 @@ main {
 }
 
 .grid *:hover {
-  background-color: green;
+  background-color: black;
+  color: white;
+}
+
+#currentPlayer {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+#startGame {
+  margin: 50px;
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid black;
+  font-size: 30px;
+}
+
+#startGame:hover {
+  background-color: black;
+  color: white;
 }
