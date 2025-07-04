@@ -1,41 +1,44 @@
-
-
-function game() {
-
-    const boardPlacements = {
-        "X": 0,
-        "O": 1,
-    }
-
-    // gameboard object
-    const gameboard = (function() {
-        return {
-            board: [
+class Gameboard {
+    constructor() {
+        this.board = [
                 [-1,-1,-1],
                 [-1,-1,-1],
                 [-1,-1,-1]
-            ]
-        }
-    })()
-
-    // Rounds
-    let round = 1
-    const addRound = () => round++;
-    const getRound = () => round;
-
-
-    //player object
-    function player(name, playerNumber) {
-    return {
-        name,
-        playerNumber
+        ];
     }
-}   
+}
 
-    const checkWinner = () => {
-        const X_ROW_WINNER = [boardPlacements.X, boardPlacements.X, boardPlacements.X]
-        const O_ROW_WINNER = [boardPlacements.O, boardPlacements.O, boardPlacements.O]
-        const board = gameboard.board.slice();
+class Player {
+    constructor(name, playerNumber) {
+        this.name = name;
+        this.playerNumber = playerNumber;
+    }
+}
+
+class Game {
+    constructor() {
+        this.round = 1;
+        this.gameboard = new Gameboard;
+        this.boardPlacements = {
+                    "X": 0,
+                    "O": 1,
+        };
+        this.player1 = new Player("Player 1", 0);
+        this.player2 = new Player("Player 2", 1);
+    }
+
+    addRound() { 
+        return this.round++ 
+    };
+    getRound() {
+        return this.round
+    };
+
+
+    checkWinner() {
+        const X_ROW_WINNER = [this.boardPlacements.X, this.boardPlacements.X, this.boardPlacements.X]
+        const O_ROW_WINNER = [this.boardPlacements.O, this.boardPlacements.O, this.boardPlacements.O]
+        const board = this.gameboard.board.slice();
 
         const cols = [
             [board[0][0], board[1][0], board[2][0]], 
@@ -64,7 +67,7 @@ function game() {
 
         
         //check row
-        for (row of concatBoard) {
+        for (const row of concatBoard) {
             if (checkRow(row, X_ROW_WINNER)) {
                 return true
             }
@@ -75,131 +78,112 @@ function game() {
             
             // if no winner return false
             return false;
-    }
+    };
 
     //make a move
-    const makeMove = (player, x, y) => {
-            gameboard.board[x][y] = player.playerNumber;
-        
-    }
-    
-    return {
-        player1: player("Player 1", 0),
-        player2: player("Player 2", 1),
-        gameboard,
-        getRound,
-        addRound,
-        makeMove,
-        checkWinner,
-        boardPlacements
+    makeMove(player, x, y) {
+        this.gameboard.board[x][y] = player.playerNumber;
     }
 }
 
-function gameProgress() {
+class GameProgress {
 
+    constructor() {
+        this.newGame = new Game();
+        this.currentPlayer = this.newGame.player1;
+        this.gameMarkings = {
+            0: "X",
+            1: "O"
+        };
+        this.gameCompleted = false;
 
-    let gameCompleted = false;
+        document.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const form = new FormData(event.target);
 
-    const gameMarkings = {
-        0: "X",
-        1: "O"
+            if (form.get("player1Name") !== "") {
+                this.newGame.player1.name = form.get("player1Name");
+            }
+            if (form.get("player2Name") !== "") {
+                this.newGame.player2.name = form.get("player2Name");
+            }
+            this.setCurrentPlayer()
+        });
+        //setup event listeners for grid cells
+        document.querySelectorAll(".gridCell").forEach((el) => {
+            el.addEventListener("click", (e) => {
+                if (!this.gameCompleted) {
+                    this.gameTurn(e.target.dataset.x, e.target.dataset.y)
+                }
+                
+            })
+        });
+
+        this.setCurrentPlayer();
+        this.displayBoard();  
     }
 
-    const newGame = game();
-
-    //update player name
-    document.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const form = new FormData(event.target);
-
-        if (form.get("player1Name") !== "") {
-            newGame.player1.name = form.get("player1Name");
-        }
-        if (form.get("player2Name") !== "") {
-            newGame.player2.name = form.get("player2Name");
-        }
-        setCurrentPlayer()
-    });
-
-    const displayBoard = () => {
-        for (let x = 0; x < newGame.gameboard.board.length; x++) {
-            for (let y = 0; y < newGame.gameboard.board.length; y++) {
+    displayBoard() {
+        for (let x = 0; x < this.newGame.gameboard.board.length; x++) {
+            for (let y = 0; y < this.newGame.gameboard.board.length; y++) {
                 const gridCell = document.getElementById(`${x}-${y}`);
-                if (newGame.gameboard.board[x][y] !== -1) {
-                    gridCell.innerText = gameMarkings[newGame.gameboard.board[x][y]];
+                if (this.newGame.gameboard.board[x][y] !== -1) {
+                    gridCell.innerText = this.gameMarkings[this.newGame.gameboard.board[x][y]];
                 } else {
                     gridCell.innerText = "";
                 }
                 
             }
         }
-    };
+    }
 
-    let currentPlayer = newGame.player1;
+    setCurrentPlayer() {
+        document.querySelector("#currentPlayer").innerText = `${this.currentPlayer.name}'s Turn (${this.gameMarkings[this.currentPlayer.playerNumber]})`;
+    }
 
-    const setCurrentPlayer = () => {
-        document.querySelector("#currentPlayer").innerText = `${currentPlayer.name}'s Turn (${gameMarkings[currentPlayer.playerNumber]})`;
-    };
+    getCurrentPlayer() {
+        currentPlayer
+    }
 
-    const getCurrentPlayer = () => currentPlayer;
-
-    const updatePlayer = () => {
-        if (currentPlayer.playerNumber === newGame.player1.playerNumber) {
-            currentPlayer = newGame.player2;
+    updatePlayer = () => {
+        if (this.currentPlayer.playerNumber === this.newGame.player1.playerNumber) {
+            this.currentPlayer = this.newGame.player2;
         } else {
-            currentPlayer = newGame.player1;
+            this.currentPlayer = this.newGame.player1;
         }
     }
 
-    const endGame = (draw) => {
-        gameCompleted = true;
+    endGame(draw) {
+        this.gameCompleted = true;
         if (!draw) {
-            document.querySelector("#currentPlayer").innerText = `${currentPlayer.name} wins!`
+            document.querySelector("#currentPlayer").innerText = `${this.currentPlayer.name} wins!`
             return
         }
         document.querySelector("#currentPlayer").innerText = `draw!`      
-    };
+    }
 
-    const gameTurn = (x, y) => {
-        if (newGame.gameboard.board[parseInt(x)][parseInt(y)] !==  -1) {
+    gameTurn(x, y) {
+        if (this.newGame.gameboard.board[parseInt(x)][parseInt(y)] !==  -1) {
             return
         };
 
-        newGame.makeMove(currentPlayer, parseInt(x), parseInt(y))
-        displayBoard()
-        if (newGame.checkWinner()) {
-            endGame(draw=false)
+        this.newGame.makeMove(this.currentPlayer, parseInt(x), parseInt(y))
+        this.displayBoard()
+        if (this.newGame.checkWinner()) {
+            this.endGame(false);
         } else {
-            if (newGame.getRound() === 9) {
-                endGame(draw=true)
+            if (this.newGame.getRound() === 9) {
+                this.endGame(true);
             } else {
-                updatePlayer();
-                setCurrentPlayer();
-                newGame.addRound()
+                this.updatePlayer();
+                this.setCurrentPlayer();
+                this.newGame.addRound()
             }   
         }
-    }
-
-    //setup event listeners for grid cells
-    document.querySelectorAll(".gridCell").forEach((el) => {
-        el.addEventListener("click", (e) => {
-            if (!gameCompleted) {
-                gameTurn(e.target.dataset.x, e.target.dataset.y)
-            }
-            
-        })
-    });
-
-    setCurrentPlayer()
-    displayBoard()
-
-    return {
-        round: newGame.getRound(),
-        getCurrentPlayer
     }
 }
 
 document.querySelector("#startGame").addEventListener("click", () => {
-    gameProgress()
+    new GameProgress()
 })
 
